@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Money Calculator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="header">
+    <h1>💰 Earnings Dashboard on Waste</h1>
+    <div>
+        <a href="/dashboard"><button class="nav-btn">⬅ Back</button></a>
+        <a href="/logout"><button class="nav-btn">🚪 Logout</button></a>
+    </div>
+</div>
+
+<div class="form-section">
+    <h2>📊 Current Session Waste Summary</h2>
+    <div class="summary-box">
+        <p>♻️ <strong>Recyclable:</strong> {{ recyclable_weight }} kg</p>
+        <p>🌱 <strong>Organic:</strong> {{ organic_weight }} kg</p>
+        <p>⚠️ <strong>Hazardous:</strong> {{ hazardous_weight }} kg</p>
+    </div>
+    <hr>
+    <h2>💵 Earnings Calculation</h2>
+    <div class="earnings-box">
+        <p>♻️ Recyclable → ₹20 × {{ recyclable_weight }} = ₹{{ recyclable_weight * 20 }}</p>
+        <p>🌱 Organic → ₹10 × {{ organic_weight }} = ₹{{ organic_weight * 10 }}</p>
+        <p>⚠️ Hazardous → ₹0</p>
+    </div>
+    <hr>
+    <h2>🏦 Total Earnings</h2>
+    <h1 style="color:green;">₹{{ total_money }}</h1>
+    <p class="note">(Only recyclable and organic waste generate income)</p>
+</div>
+
+<div style="text-align:center; margin-top:20px;">
+    <a href="/essentials"><button class="nav-btn">🛒 Use Money / Daily Essentials</button></a>
+    <a href="/dashboard"><button class="nav-btn">⬅ Back to Dashboard</button></a>
+</div>
+
+</body>
+</html>

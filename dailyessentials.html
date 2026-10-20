@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Daily Essentials</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .item-emoji {
+            font-size: 56px;
+            display: block;
+            text-align: center;
+            margin: 8px auto;
+            line-height: 1;
+        }
+
+        .item-card {
+            background: white;
+            padding: 14px 10px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            border: 1px solid #e0e0e0;
+        }
+
+        .item-card h3 {
+            font-size: 13px;
+            margin: 8px 0 4px;
+            color: #333;
+        }
+
+        .item-card p {
+            font-size: 15px;
+            font-weight: bold;
+            color: #2e7d32;
+            margin: 2px 0 10px;
+        }
+
+        .item-card .buy-btn {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 7px 0;
+            border-radius: 6px;
+            width: 88%;
+            display: block;
+            margin: 4px auto;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .item-card .upi-btn {
+            background: #1565c0;
+            color: white;
+            border: none;
+            padding: 7px 0;
+            border-radius: 6px;
+            width: 88%;
+            display: block;
+            margin: 4px auto;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .item-card .upi-input {
+            width: 85%;
+            padding: 5px 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 12px;
+            margin: 6px auto 4px;
+            display: block;
+            box-sizing: border-box;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            padding: 20px;
+        }
+
+        @media (max-width: 700px) {
+            .items-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 420px) {
+            .items-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>🛒 Daily Essentials Store</h1>
+    <div>
+        <a href="/dashboard"><button class="nav-btn">⬅ Back</button></a>
+        <a href="/logout"><button class="nav-btn">🚪 Logout</button></a>
+    </div>
+</div>
+
+<div class="balance-box">
+    <h2>💰 Balance: ₹{{ balance }}</h2>
+</div>
+
+{% if message %}
+<div class="result-box" style="text-align:center; margin: 0 20px 10px 20px;">
+    <p>{{ message }}</p>
+</div>
+{% endif %}
+
+<div class="upi-section">
+    <h3>➕ Add Money via UPI</h3>
+    <form method="POST">
+        <input type="number" name="amount" placeholder="Enter Amount" required>
+        <input type="text" name="upi" placeholder="Enter UPI ID" required>
+        <button name="action" value="add_money">💳 Add Money</button>
+    </form>
+</div>
+
+{% set item_emojis = {
+    "Toothbrush & Toothpaste": "🪥",
+    "Bath Soap":               "🧼",
+    "Shampoo":                 "🧴",
+    "Face Wash":               "🫧",
+    "Hand Wash":               "🧼",
+    "Hair Oil":                "💆",
+    "Shaving Kit":             "🪒",
+    "Deodorant":               "🧴",
+    "Moisturizer":             "🧴",
+    "Towel":                   "🛁",
+    "Cooking Oil":             "🫙",
+    "Tea/Coffee":              "☕",
+    "Rice & Flour":            "🍚",
+    "Pulses":                  "🫘",
+    "Spices":                  "🌶️",
+    "Dishwash":                "🍽️",
+    "Detergent":               "🧺",
+    "Floor Cleaner":           "🧹",
+    "Toilet Cleaner":          "🚽",
+    "Garbage Bags":            "🗑️",
+    "Water Bottle":            "💧",
+    "Mobile Charger":          "🔌",
+    "Slippers":                "🩴",
+    "Sanitary Pads":           "🩹"
+} %}
+
+<div class="items-grid">
+    {% for item, price in items.items() %}
+    <div class="item-card">
+
+        <span class="item-emoji">{{ item_emojis.get(item, "🛒") }}</span>
+
+        <h3>{{ item }}</h3>
+        <p>₹{{ price }}</p>
+
+        <form method="POST">
+            <input type="hidden" name="item" value="{{ item }}">
+            <button class="buy-btn" name="action" value="buy">🛒 Buy</button>
+        </form>
+
+        <form method="POST">
+            <input type="hidden" name="item" value="{{ item }}">
+            <input class="upi-input" type="text" name="upi" placeholder="Enter UPI ID">
+            <button class="upi-btn" name="action" value="pay_upi">💳 Pay via UPI</button>
+        </form>
+
+    </div>
+    {% endfor %}
+</div>
+
+<div class="upi-section">
+    <h3>💸 Withdraw Money</h3>
+    <form method="POST">
+        <input type="text" name="upi" placeholder="Enter UPI ID" required>
+        <button name="action" value="withdraw">Withdraw</button>
+    </form>
+</div>
+
+</body>
+</html>

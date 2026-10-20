@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Waste Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="header">
+    <h1>🌍 Welcome, {{ user.username }}</h1>
+    <a href="/logout"><button class="nav-btn">🚪 Logout</button></a>
+</div>
+
+<div class="cards">
+    <div class="card">
+        <h2>🏆 Points</h2>
+        <p>{{ user.points }}</p>
+    </div>
+    <div class="card">
+        <h2>🌱 Eco Score</h2>
+        <p>{{ eco_score }}</p>
+    </div>
+    <div class="card">
+        <h2>💰 Balance</h2>
+        <p>₹{{ user.balance }}</p>
+    </div>
+</div>
+
+<div class="nav-section">
+    <a href="/calculator"><button class="nav-btn">💰 Money Calculator</button></a>
+    <a href="/essentials"><button class="nav-btn">🛒 Daily Essentials</button></a>
+</div>
+
+{% if user.balance < 50 %}
+<div class="result-box" style="text-align:center;">
+    <p>⚠️ Your balance is low. Submit more waste to earn!</p>
+</div>
+{% endif %}
+
+<div class="form-section">
+    <h2>➕ Add Waste Entry</h2>
+    <form method="POST" class="waste-form">
+        <label>Select Waste Type</label>
+        <select name="type" required>
+            <option value="recyclable">♻️ Recyclable</option>
+            <option value="organic">🌱 Organic</option>
+            <option value="hazardous">⚠️ Hazardous</option>
+        </select>
+        <label>Enter Weight (kg)</label>
+        <input type="number" step="0.1" name="weight" placeholder="e.g. 2.5" required>
+        <button type="submit" class="submit-btn">🚀 Submit Waste</button>
+    </form>
+    {% if result %}
+    <div class="result-box">
+        <p>{{ result }}</p>
+    </div>
+    {% endif %}
+</div>
+
+<div class="history">
+    <h2>📜 Activity History</h2>
+    {% if user.history %}
+        <ul>
+            {% for item in user.history %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No activity yet. Start adding waste!</p>
+    {% endif %}
+</div>
+
+</body>
+</html>
